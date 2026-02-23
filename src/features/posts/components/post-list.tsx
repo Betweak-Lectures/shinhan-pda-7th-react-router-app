@@ -1,11 +1,7 @@
-import { useEffect, useState } from "react";
-import type { PostItem } from "../types";
-import { fetchPostList } from "../apis";
 import { PostCard } from "./post-card";
 
-import { useQuery } from "@tanstack/react-query";
-import { getPostListQueryOptions } from "../queries";
 import { Spinner } from "@/components/ui/spinner";
+import { usePostList } from "../hooks";
 
 export default function PostList() {
   // api 요청 -> state 저장
@@ -14,7 +10,10 @@ export default function PostList() {
     isLoading,
     isError,
     error,
-  } = useQuery(getPostListQueryOptions(1, 10));
+  } = usePostList({
+    page: 1,
+    limit: 10,
+  });
 
   return (
     <div>
