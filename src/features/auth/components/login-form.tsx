@@ -34,8 +34,21 @@ export function LoginForm() {
     mode: "onChange",
   });
 
+  const { login, isLoginPending } = useAuth();
+  const navigate = useNavigate();
+
   const onSubmit: SubmitHandler<LoginFormSchema> = (data) => {
-    console.log(data);
+    login(data)
+      .then((result) => {
+        if (result.success) {
+          const user = result.data.user;
+          toast(`${user.nickname}님 환영합니다.`);
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        toast.error(`${err.message}`);
+      });
   };
 
   return (
