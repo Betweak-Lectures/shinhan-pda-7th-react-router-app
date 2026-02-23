@@ -10,7 +10,11 @@ import type {
 } from "../types";
 import { fetchMe, loginServer, logoutServer, signupServer } from "../apis";
 import type { ApiEnvelope } from "@/types/api-envelope";
-import { clearAccessToken, setAccessToken } from "@/lib/auth-token-storage";
+import {
+  clearAccessToken,
+  getAccessToken,
+  setAccessToken,
+} from "@/lib/auth-token-storage";
 
 export interface AuthContext {
   user: AuthUser | null;
@@ -35,12 +39,22 @@ export const authContext = createContext<AuthContext>({
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
 
+  // 요청1.
+  // useEffect(() => {
+  //   fetchMe().then((result) => {
+  //     if (result.success) {
+  //       setUser(result.data.user);
+  //     }
+  //   });
+  // }, []);
+
+  // 요청 없이
   useEffect(() => {
-    fetchMe().then((result) => {
-      if (result.success) {
-        setUser(result.data.user);
-      }
-    });
+    const token = getAccessToken();
+    if (token) {
+      const user = atob(token.split(".")[1]);
+      setUser(JSON.parse(user) as AuthUser);
+    }
   }, []);
 
   // login
