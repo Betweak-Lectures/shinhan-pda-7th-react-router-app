@@ -52,8 +52,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const token = getAccessToken();
     if (token) {
-      const user = atob(token.split(".")[1]);
-      setUser(JSON.parse(user) as AuthUser);
+      console.log(atob(token.split(".")[1]));
+      const user = JSON.parse(atob(token.split(".")[1])) as AuthUser;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setUser(user);
     }
   }, []);
 
