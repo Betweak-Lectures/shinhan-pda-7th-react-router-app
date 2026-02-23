@@ -37,6 +37,7 @@ export function LoginForm() {
   const onSubmit: SubmitHandler<LoginFormSchema> = (data) => {
     console.log(data);
   };
+
   return (
     <div className={"flex flex-col gap-6"}>
       <Card>

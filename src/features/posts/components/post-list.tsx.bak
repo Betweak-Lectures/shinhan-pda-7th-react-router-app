@@ -3,27 +3,18 @@ import type { PostItem } from "../types";
 import { fetchPostList } from "../apis";
 import { PostCard } from "./post-card";
 
-import { useQuery } from "@tanstack/react-query";
-import { getPostListQueryOptions } from "../queries";
-import { Spinner } from "@/components/ui/spinner";
-
 export default function PostList() {
   // api 요청 -> state 저장
-  const {
-    data: posts,
-    isLoading,
-    isError,
-    error,
-  } = useQuery(getPostListQueryOptions(1, 10));
+  const [posts, setPosts] = useState<PostItem[]>([]);
 
+  useEffect(() => {
+    fetchPostList(1, 10).then((data) => {
+      setPosts(data.items);
+    });
+  }, []);
   return (
     <div>
-      {isLoading && <Spinner />}
-      {isError && <div>에러가 발생하였습니다.</div>}
-      {!isLoading && !isError && (!posts || posts.items.length === 0) && (
-        <p>게시글이 없습니다..</p>
-      )}
-      {posts?.items.map((post) => {
+      {posts.map((post) => {
         return (
           <PostCard
             key={post.id}

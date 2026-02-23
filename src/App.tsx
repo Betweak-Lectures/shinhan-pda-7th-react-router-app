@@ -4,13 +4,18 @@ import { router } from "./router";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "./features/auth/components/auth-provider";
 
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./lib/query-client";
+
 function App() {
   return (
     <>
-      <AuthProvider>
-        <RouterProvider router={router}></RouterProvider>
-        <Toaster />
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <RouterProvider router={router}></RouterProvider>
+          <Toaster />
+        </AuthProvider>
+      </QueryClientProvider>
     </>
   );
 }
