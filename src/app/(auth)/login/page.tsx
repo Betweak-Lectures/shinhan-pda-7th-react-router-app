@@ -1,7 +1,13 @@
+import { LoginForm } from "@/features/auth/components/login-form";
+
 export default function LoginPage() {
   return (
     <div>
-      <p className="text-blue-700">로그인 페이지</p>
+      <div className="flex w-full flex-col items-center p-6">
+        <div className="w-full max-w-sm">
+          <LoginForm />
+        </div>
+      </div>
     </div>
   );
 }
