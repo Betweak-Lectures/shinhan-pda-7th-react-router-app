@@ -20,6 +20,9 @@ importers:
       lucide-react:
         specifier: ^0.574.0
         version: 0.574.0(react@19.2.4)
+      my-react-router-app:
+        specifier: 'link:'
+        version: 'link:'
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)

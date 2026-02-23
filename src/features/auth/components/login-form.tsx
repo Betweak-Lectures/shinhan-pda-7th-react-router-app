@@ -1,3 +1,4 @@
+// src/features/auth/components/login-form.tsx
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -9,13 +10,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState, type ChangeEvent } from "react";
 import type { LoginFormData } from "../types";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../hooks";
+import { toast } from "sonner";
 
 export function LoginForm() {
   const [formInput, setFormInput] = useState<LoginFormData>({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
+  const { login, user } = useAuth();
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormInput((prev) => {
@@ -25,6 +30,18 @@ export function LoginForm() {
       };
     });
   };
+
+  const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const result = await login(formInput);
+    if (result.success) {
+      toast(`${result.data.user.nickname}님 환영합니다.`);
+      navigate("/");
+    } else {
+      toast.error(`${result.error.message}`);
+    }
+  };
+
   return (
     <div className={"flex flex-col gap-6"}>
       <Card>
@@ -32,7 +49,7 @@ export function LoginForm() {
           <CardTitle>로그인</CardTitle>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={onSubmit}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">이메일</FieldLabel>

@@ -1,3 +1,4 @@
+// src/features/auth/components/signup-form.tsx
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -8,8 +9,10 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useState, type ChangeEvent } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import type { SignupFormData } from "../types";
+import { useAuth } from "../hooks";
+import { toast } from "sonner";
 
 export function SignupForm() {
   const [formInput, setFormInput] = useState<SignupFormData>({
@@ -18,6 +21,23 @@ export function SignupForm() {
     password: "",
     confirmPassword: "",
   });
+
+  const navigate = useNavigate();
+  const { signup, user } = useAuth();
+
+  const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (formInput.password !== formInput.confirmPassword) {
+      return toast.error("비밀번호가 서로 다릅니다.");
+    }
+    const result = await signup(formInput);
+    if (result.success) {
+      toast(`${result.data.user.nickname}님 환영합니다.`);
+      navigate("/");
+    } else {
+      toast.error(`${result.error.message}`);
+    }
+  };
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormInput((prev) => {
@@ -34,7 +54,7 @@ export function SignupForm() {
         <CardTitle>회원가입</CardTitle>
       </CardHeader>
       <CardContent>
-        <form>
+        <form onSubmit={onSubmit}>
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="email">이메일</FieldLabel>
