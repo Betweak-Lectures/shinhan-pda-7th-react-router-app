@@ -3,7 +3,8 @@ import type { PostItem } from "./types";
 
 export async function fetchPostList(page: number, pageSize: number) {
   // 환경변수 받은 것 사용
-  const url = `${import.meta.env.VITE_BASE_API_URL}/posts?page=${page}&pageSize=${pageSize}`;
+  // const url = `${import.meta.env.VITE_BASE_API_URL}/posts?page=${page}&pageSize=${pageSize}`;
+  const url = `/api/posts?page=${page}&pageSize=${pageSize}`;
   try {
     const resp = await fetch(url);
     const data = (await resp.json()) as ApiPaginationEnvelope<PostItem>;
