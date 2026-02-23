@@ -10,11 +10,7 @@ import type {
 } from "../types";
 import { fetchMe, loginServer, logoutServer, signupServer } from "../apis";
 import type { ApiEnvelope } from "@/types/api-envelope";
-import {
-  clearAccessToken,
-  getAccessToken,
-  setAccessToken,
-} from "@/lib/auth-token-storage";
+import { clearAccessToken, setAccessToken } from "@/lib/auth-token-storage";
 
 export interface AuthContext {
   user: AuthUser | null;

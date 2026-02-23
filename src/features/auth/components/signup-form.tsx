@@ -3,15 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useState, type ChangeEvent } from "react";
-import { Link, useNavigate } from "react-router";
-import type { SignupFormData } from "../types";
+import { useNavigate } from "react-router";
 import { useAuth } from "../hooks";
 import { toast } from "sonner";
 

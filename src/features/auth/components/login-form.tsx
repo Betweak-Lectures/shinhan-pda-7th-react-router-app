@@ -9,18 +9,12 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useState, type ChangeEvent } from "react";
-import type { LoginFormData } from "../types";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../hooks";
 import { toast } from "sonner";
 
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
-import {
-  loginFormSchema,
-  type LoginFormSchema,
-  type SignupFormSchema,
-} from "../schema";
+import { loginFormSchema, type LoginFormSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 
@@ -34,7 +28,7 @@ export function LoginForm() {
     mode: "onChange",
   });
 
-  const { login, isLoginPending } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<LoginFormSchema> = (data) => {

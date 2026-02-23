@@ -1,7 +1,5 @@
 // src/features/auth/hooks.ts
-
-import { useContext, useMemo } from "react";
-import { authContext } from "./components/auth-provider";
+import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMeQueryOptions } from "./queries";
 import { loginServer, logoutServer, signupServer } from "./apis";

@@ -44,7 +44,7 @@ export default function DesktopNav({ navItems }: DesktopNavProps) {
         {user ? (
           <Button
             variant="ghost"
-            onClick={async (e) => {
+            onClick={async () => {
               const result = await logout();
               if (result.success) {
                 toast("로그아웃하셨습니다.");

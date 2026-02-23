@@ -9,7 +9,7 @@ export default function PostList() {
     data: posts,
     isLoading,
     isError,
-    error,
+    // error,
   } = usePostList({
     page: 1,
     limit: 10,

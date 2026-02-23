@@ -36,7 +36,7 @@ function MobileNavRight() {
             <Button
               variant="outline"
               className="w-full"
-              onClick={async (e) => {
+              onClick={async () => {
                 const result = await logout();
                 if (result.success) {
                   toast("로그아웃 성공");
