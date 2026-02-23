@@ -1,7 +1,13 @@
+import { SignupForm } from "@/features/auth/components/signup-form";
+
 export default function SignUpPage() {
   return (
     <div>
-      <p className="text-blue-700">회원가입 페이지</p>
+      <div className="flex w-full flex-col items-center p-6">
+        <div className="w-full max-w-sm">
+          <SignupForm />
+        </div>
+      </div>
     </div>
   );
 }
