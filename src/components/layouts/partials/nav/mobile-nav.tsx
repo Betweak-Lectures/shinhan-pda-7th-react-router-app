@@ -1,22 +1,53 @@
 import { Link, NavLink } from "react-router";
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import { useAuth } from "@/features/auth/hooks";
+import { toast } from "sonner";
 
 function MobileNavRight() {
+  const { user, logout } = useAuth();
   return (
     <div className="mt-6 grid grid-cols-2 gap-2 px-2">
-      <SheetClose asChild>
-        <Button asChild variant="outline" className="w-full">
-          <Link to="/login">로그인</Link>
-        </Button>
-      </SheetClose>
-      <SheetClose asChild>
-        <Button asChild className="w-full">
-          <Link to="/signup">회원가입</Link>
-        </Button>
-      </SheetClose>
+      {!user ? (
+        <>
+          <SheetClose asChild>
+            <Button asChild variant="outline" className="w-full">
+              <Link to="/login">로그인</Link>
+            </Button>
+          </SheetClose>
+          <SheetClose asChild>
+            <Button asChild className="w-full">
+              <Link to="/signup">회원가입</Link>
+            </Button>
+          </SheetClose>
+        </>
+      ) : (
+        <>
+          <SheetClose asChild>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={async (e) => {
+                const result = await logout();
+                if (result.success) {
+                  toast("로그아웃 성공");
+                }
+              }}
+            >
+              로그아웃
+            </Button>
+          </SheetClose>
+        </>
+      )}
     </div>
   );
 }

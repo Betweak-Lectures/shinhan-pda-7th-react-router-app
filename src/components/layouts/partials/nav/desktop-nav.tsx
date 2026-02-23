@@ -1,14 +1,18 @@
+// src/components/layouts/partials/nav/desktop-nav.tsx
 import { Link, NavLink } from "react-router";
 
 import { Button } from "@/components/ui/button";
 
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/features/auth/hooks";
+import { toast } from "sonner";
 
 interface DesktopNavProps {
   navItems: { to: string; label: string; end?: boolean }[];
 }
 
 export default function DesktopNav({ navItems }: DesktopNavProps) {
+  const { user, logout } = useAuth();
   return (
     <>
       <nav className="ml-10 hidden items-center gap-6 md:flex">
@@ -37,12 +41,29 @@ export default function DesktopNav({ navItems }: DesktopNavProps) {
         ))}
       </nav>
       <div className="ml-auto hidden items-center gap-2 md:flex">
-        <Button variant="ghost" asChild>
-          <Link to="/login">로그인</Link>
-        </Button>
-        <Button asChild>
-          <Link to="/signup">회원가입</Link>
-        </Button>
+        {user ? (
+          <Button
+            variant="ghost"
+            onClick={async (e) => {
+              const result = await logout();
+              if (result.success) {
+                toast("로그아웃하셨습니다.");
+                // navigate
+              }
+            }}
+          >
+            로그아웃
+          </Button>
+        ) : (
+          <>
+            <Button variant="ghost" asChild>
+              <Link to="/login">로그인</Link>
+            </Button>
+            <Button asChild>
+              <Link to="/signup">회원가입</Link>
+            </Button>
+          </>
+        )}
       </div>
     </>
   );
