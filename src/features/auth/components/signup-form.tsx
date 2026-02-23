@@ -34,8 +34,20 @@ export function SignupForm() {
     mode: "onChange",
   });
 
+  const navigate = useNavigate();
+  const { signup } = useAuth();
   const onSubmit: SubmitHandler<SignupFormSchema> = (data) => {
-    console.log(data);
+    signup(data)
+      .then((result) => {
+        if (result.success) {
+          const user = result.data.user;
+          toast(`${user.nickname}님 환영합니다.`);
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        toast.error(`${err.message}`);
+      });
   };
 
   return (
