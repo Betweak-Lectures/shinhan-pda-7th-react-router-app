@@ -40,24 +40,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
 
   // 요청1.
-  // useEffect(() => {
-  //   fetchMe().then((result) => {
-  //     if (result.success) {
-  //       setUser(result.data.user);
-  //     }
-  //   });
-  // }, []);
-
-  // 요청 없이
   useEffect(() => {
-    const token = getAccessToken();
-    if (token) {
-      console.log(atob(token.split(".")[1]));
-      const user = JSON.parse(atob(token.split(".")[1])) as AuthUser;
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUser(user);
-    }
+    fetchMe().then((result) => {
+      if (result.success) {
+        setUser(result.data.user);
+      }
+    });
   }, []);
+
+  // // 요청 없이
+  // useEffect(() => {
+  //   const token = getAccessToken();
+  //   if (token) {
+  //     console.log(atob(token.split(".")[1]));
+  //     const user = JSON.parse(atob(token.split(".")[1])) as AuthUser;
+  //     // eslint-disable-next-line react-hooks/set-state-in-effect
+  //     setUser(user);
+  //   }
+  // }, []);
 
   // login
   const login = async (payload: LoginPayload) => {

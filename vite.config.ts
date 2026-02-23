@@ -18,4 +18,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://shinhan-pda-react-router-full-examp.vercel.app",
+        changeOrigin: true,
+      },
+    },
+  },
 });

@@ -9,7 +9,8 @@ import type {
 } from "./types";
 import { getAccessToken } from "@/lib/auth-token-storage";
 
-const BASE_URL = "https://shinhan-pda-react-router-full-examp.vercel.app";
+// const BASE_URL = "https://shinhan-pda-react-router-full-examp.vercel.app";
+const BASE_URL = "";
 
 export async function signupServer(payload: SignupPayload) {
   const response = await fetch(`${BASE_URL}/api/auth/signup`, {
