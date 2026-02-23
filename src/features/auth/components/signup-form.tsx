@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
@@ -14,38 +15,27 @@ import type { SignupFormData } from "../types";
 import { useAuth } from "../hooks";
 import { toast } from "sonner";
 
+import { type SignupFormSchema, signupFormSchema } from "../schema";
+
+import { Controller, useForm, type SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "@/components/ui/form";
+
 export function SignupForm() {
-  const [formInput, setFormInput] = useState<SignupFormData>({
-    email: "",
-    nickname: "",
-    password: "",
-    confirmPassword: "",
+  const form = useForm<SignupFormSchema>({
+    resolver: zodResolver(signupFormSchema),
+    defaultValues: {
+      email: "",
+      nickname: "",
+      password: "",
+      confirmPassword: "",
+    },
+    // validation check의 기준 (onChange: 입력할때마다)
+    mode: "onChange",
   });
 
-  const navigate = useNavigate();
-  const { signup, user } = useAuth();
-
-  const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (formInput.password !== formInput.confirmPassword) {
-      return toast.error("비밀번호가 서로 다릅니다.");
-    }
-    const result = await signup(formInput);
-    if (result.success) {
-      toast(`${result.data.user.nickname}님 환영합니다.`);
-      navigate("/");
-    } else {
-      toast.error(`${result.error.message}`);
-    }
-  };
-
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormInput((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
+  const onSubmit: SubmitHandler<SignupFormSchema> = (data) => {
+    console.log(data);
   };
 
   return (
@@ -54,65 +44,82 @@ export function SignupForm() {
         <CardTitle>회원가입</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={onSubmit}>
-          <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="email">이메일</FieldLabel>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                name="email"
-                value={formInput.email}
-                onChange={onInputChange}
-                required
-              />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="name">닉네임</FieldLabel>
-              <Input
-                id="nickname"
-                name="nickname"
-                value={formInput.nickname}
-                onChange={onInputChange}
-                type="text"
-                placeholder="John Doe"
-                required
-              />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="password">비밀번호</FieldLabel>
-              <Input
-                id="password"
-                type="password"
-                name="password"
-                value={formInput.password}
-                onChange={onInputChange}
-                required
-              />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="confirm-password">비밀번호 확인</FieldLabel>
-              <Input
-                id="confirm-password"
-                type="password"
-                name="confirmPassword"
-                value={formInput.confirmPassword}
-                onChange={onInputChange}
-                required
-              />
-            </Field>
+        <Form {...form}>
+          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
-              <Field>
-                <Button type="submit">회원가입</Button>
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>이메일</FieldLabel>
+                    <Input {...field} id={field.name} type="email" />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
 
-                <FieldDescription className="px-6 text-center">
-                  이미 계정이 있으신가요? <Link to="/login">로그인</Link>
-                </FieldDescription>
-              </Field>
+              <Controller
+                name="nickname"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>닉네임</FieldLabel>
+                    <Input {...field} id={field.name} type="text" />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>비밀번호</FieldLabel>
+
+                    <Input {...field} id={field.name} type="password" />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="confirmPassword"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>비밀번호 확인</FieldLabel>
+                    <Input {...field} id={field.name} type="password" />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
             </FieldGroup>
-          </FieldGroup>
-        </form>
+
+            {form.formState.errors.root?.message ? (
+              <p className="text-sm text-destructive">
+                {form.formState.errors.root.message}
+              </p>
+            ) : null}
+
+            <Button
+              className="w-full"
+              disabled={form.formState.isSubmitting}
+              type="submit"
+            >
+              회원가입
+            </Button>
+          </form>
+        </Form>
       </CardContent>
     </Card>
   );
