@@ -3,9 +3,9 @@ import { Outlet } from "react-router";
 
 export default function PostLayout() {
   return (
-    <div>
+    <main className="mx-auto container">
       <h1>게시글 레이아웃</h1>
       <Outlet />
-    </div>
+    </main>
   );
 }

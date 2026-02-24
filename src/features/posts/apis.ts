@@ -1,4 +1,5 @@
 import type { ApiPaginationEnvelope } from "@/types/api-envelope";
+import { apiRequest } from "@/lib/api-client";
 import type { PostItem } from "./types";
 
 export async function fetchPostList(page: number, pageSize: number) {
@@ -14,6 +15,21 @@ export async function fetchPostList(page: number, pageSize: number) {
     }
 
     throw new Error(data.error.message);
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+export async function fetchPostDetail(postId: number) {
+  try {
+    const result = await apiRequest<{ post: PostItem }>(`/api/posts/${postId}`);
+
+    if (result.success) {
+      return result.data.post;
+    } else {
+      throw new Error(result.error.message);
+    }
   } catch (err) {
     console.error(err);
     throw err;
