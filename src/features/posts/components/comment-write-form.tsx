@@ -10,34 +10,44 @@ import { postQueryKey } from "../queries";
 import { writeComment } from "../apis";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
-export default function CommentWrite({ postId }: { postId: number }) {
+export default function CommentWrite({
+  parentId,
+  postId,
+}: {
+  parentId: number;
+  postId: number;
+}) {
+  const defaultValue: CommentWriteForm = {
+    content: "",
+  };
+  if (parentId) {
+    defaultValue.parentId = parentId;
+  }
+
   const form = useForm<CommentWriteForm>({
     resolver: zodResolver(commentWriteForm),
-    defaultValues: {
-      content: "",
-    },
+    defaultValues: defaultValue,
     mode: "onChange",
   });
 
   const qc = useQueryClient();
-  const navigate = useNavigate();
 
   const { mutateAsync: editMutate } = useMutation({
     mutationFn: async (data: CommentWriteForm) => {
+      console.log("data", data);
       if (postId) {
         return await writeComment(postId, data);
       }
     },
     onSuccess: (data) => {
-      if (data?.post.id) {
+      console.log(data);
+      if (data?.comment.id) {
         qc.invalidateQueries({
-          queryKey: postQueryKey.detail(data.post.id),
+          queryKey: postQueryKey.comments(data.comment.postId),
         });
         qc.invalidateQueries({
           queryKey: postQueryKey.all(),
         });
-        toast("게시글이 수정되었습니다.");
-        navigate(`/posts/${data.post.id}`);
       }
     },
   });

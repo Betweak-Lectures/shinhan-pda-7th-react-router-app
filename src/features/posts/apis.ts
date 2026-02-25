@@ -59,7 +59,7 @@ export async function editPost(
   payload: Partial<Omit<PostItem, "id">>,
 ) {
   try {
-    const result = await apiRequest<{ post: PostItem }>(
+    const result = await apiRequest<{ comment: CommentItem }>(
       `/api/posts/${postId}`,
       {
         method: "PATCH",
@@ -96,16 +96,14 @@ export async function writePost(payload: { title: string; content: string }) {
 
 export async function writeComment(
   postId: number,
-  payload: { content: string },
+  payload: { content: string; parentId?: number },
 ) {
   try {
-    const result = await apiRequest<{ post: PostItem }>(
+    const result = await apiRequest<{ comment: CommentItem }>(
       `/api/posts/${postId}/comments`,
       {
         method: "POST",
-        body: JSON.stringify({
-          content: payload.content,
-        }),
+        body: JSON.stringify(payload),
       },
     );
     if (result.success) {

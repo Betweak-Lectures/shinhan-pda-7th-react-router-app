@@ -2,11 +2,16 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { CommentItem } from "../types";
 import { useAuth } from "@/features/auth/hooks";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import CommentWrite from "./comment-write-form";
 
 export default function CommentCard({ comment }: { comment: CommentItem }) {
   const { user } = useAuth();
 
   const isMine = user && user.id === comment.author.id;
+
+  const [isOpenForm, setIsOpenForm] = useState(false);
 
   return (
     <Card>
@@ -24,6 +29,18 @@ export default function CommentCard({ comment }: { comment: CommentItem }) {
 
       <CardContent className="space-y-4">
         <p className="whitespace-pre-wrap leading-7">{comment.content}</p>
+        <Button
+          onClick={() => {
+            setIsOpenForm((prev) => !prev);
+          }}
+        >
+          {!isOpenForm ? "댓글달기" : "닫기"}
+        </Button>
+        {isOpenForm ? (
+          <>
+            <CommentWrite postId={comment.postId} parentId={comment.id} />
+          </>
+        ) : null}
       </CardContent>
 
       {comment.children
