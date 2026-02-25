@@ -1,3 +1,4 @@
+import PostCommentSection from "@/features/posts/sections/post-comment-section";
 import PostDetailSection from "@/features/posts/sections/post-detail-section";
 import { useParams } from "react-router";
 
@@ -11,6 +12,8 @@ export default function PostDetailPage() {
   return (
     <section className="space-y-6">
       <PostDetailSection postId={Number(postId)} />
+
+      <PostCommentSection postId={Number(postId)} />
     </section>
   );
 }

@@ -1,6 +1,10 @@
 // src/features/posts/hooks.ts
 import { useQuery } from "@tanstack/react-query";
-import { getPostDetailQueryOption, getPostListQueryOptions } from "./queries";
+import {
+  getPostCommentQueryOption,
+  getPostDetailQueryOption,
+  getPostListQueryOptions,
+} from "./queries";
 
 export function usePostList({ page, limit }: { page: number; limit: number }) {
   // api 요청 -> state 저장
@@ -9,4 +13,8 @@ export function usePostList({ page, limit }: { page: number; limit: number }) {
 
 export function usePostDetail({ postId }: { postId: number }) {
   return useQuery(getPostDetailQueryOption(postId));
+}
+
+export function usePostComments({ postId }: { postId: number }) {
+  return useQuery(getPostCommentQueryOption(postId));
 }

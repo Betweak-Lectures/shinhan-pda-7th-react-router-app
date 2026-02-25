@@ -41,7 +41,7 @@ export async function fetchPostComments(postId: number) {
     const result = await apiRequest<{
       postId: number;
       comments: CommentItem[];
-    }>(`/api/posts/${postId}`);
+    }>(`/api/posts/${postId}/comments`);
 
     if (result.success) {
       return result.data;
