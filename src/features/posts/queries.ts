@@ -2,10 +2,11 @@
 import { fetchPostComments, fetchPostDetail, fetchPostList } from "./apis";
 
 // Query KEY
-export const POST_LIST_QUERY_KEY = "posts" as const;
+// export const POST_LIST_QUERY_KEY = "posts" as const;
 
 // Query Key 관리 변경
 export const postQueryKey = {
+  all: () => ["posts"],
   list: (page: number, limit: number) => ["posts", page, limit] as const,
   detail: (postId: number) => ["posts", "details", postId] as const,
 

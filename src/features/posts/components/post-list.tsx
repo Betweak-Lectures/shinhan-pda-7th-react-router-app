@@ -1,9 +1,26 @@
 import { PostCard } from "./post-card";
 
+// ?page=1, ?page=2
+
 import { Spinner } from "@/components/ui/spinner";
 import { usePostList } from "../hooks";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { useSearchParams } from "react-router";
 
 export default function PostList() {
+  const [searchParams, setSearchParams] = useSearchParams({
+    page: "1",
+  });
+  const page = Number(searchParams.get("page"));
+
+  // const pageNum = searchParams.
   // api 요청 -> state 저장
   const {
     data: posts,
@@ -11,9 +28,11 @@ export default function PostList() {
     isError,
     // error,
   } = usePostList({
-    page: 6,
+    page: page,
     limit: 10,
   });
+
+  const pageSize = Math.floor(page / 10) * 10;
 
   return (
     <div>
@@ -34,6 +53,52 @@ export default function PostList() {
           />
         );
       })}
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => {
+                if (Number(page) > 1) {
+                  setSearchParams({
+                    page: String(page - 1),
+                  });
+                }
+              }}
+            />
+          </PaginationItem>
+
+          {[...Array(10).keys()].map((elem, idx) => {
+            const targetPage = pageSize + idx + 1;
+            return (
+              <PaginationItem>
+                <PaginationLink
+                  isActive={page === targetPage}
+                  onClick={() => {
+                    setSearchParams({
+                      page: String(targetPage),
+                    });
+                  }}
+                >
+                  {targetPage}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          })}
+
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={() => {
+                if (Number(page) > 1) {
+                  setSearchParams({
+                    page: String(page + 1),
+                  });
+                }
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import CommentWrite from "@/features/posts/components/comment-write-form";
 import PostCommentSection from "@/features/posts/sections/post-comment-section";
 import PostDetailSection from "@/features/posts/sections/post-detail-section";
 import { useParams } from "react-router";
@@ -9,10 +10,12 @@ export default function PostDetailPage() {
   if (!postId || isNaN(Number(postId))) {
     return <>찾으시는 게시글이 없습니다.</>;
   }
+
   return (
     <section className="space-y-6">
       <PostDetailSection postId={Number(postId)} />
 
+      <CommentWrite postId={Number(postId)} />
       <PostCommentSection postId={Number(postId)} />
     </section>
   );

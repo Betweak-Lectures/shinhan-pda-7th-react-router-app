@@ -53,3 +53,68 @@ export async function fetchPostComments(postId: number) {
     throw err;
   }
 }
+
+export async function editPost(
+  postId: number,
+  payload: Partial<Omit<PostItem, "id">>,
+) {
+  try {
+    const result = await apiRequest<{ post: PostItem }>(
+      `/api/posts/${postId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      },
+    );
+    if (result.success) {
+      return result.data;
+    } else {
+      throw new Error(result.error.message);
+    }
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+export async function writePost(payload: { title: string; content: string }) {
+  try {
+    const result = await apiRequest<{ post: PostItem }>(`/api/posts`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    if (result.success) {
+      return result.data;
+    } else {
+      throw new Error(result.error.message);
+    }
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+export async function writeComment(
+  postId: number,
+  payload: { content: string },
+) {
+  try {
+    const result = await apiRequest<{ post: PostItem }>(
+      `/api/posts/${postId}/comments`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          content: payload.content,
+        }),
+      },
+    );
+    if (result.success) {
+      return result.data;
+    } else {
+      throw new Error(result.error.message);
+    }
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
