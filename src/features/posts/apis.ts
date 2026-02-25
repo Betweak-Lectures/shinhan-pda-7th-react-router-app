@@ -1,6 +1,6 @@
 import type { ApiPaginationEnvelope } from "@/types/api-envelope";
 import { apiRequest } from "@/lib/api-client";
-import type { PostItem } from "./types";
+import type { CommentItem, PostItem } from "./types";
 
 export async function fetchPostList(page: number, pageSize: number) {
   // 환경변수 받은 것 사용
@@ -27,6 +27,24 @@ export async function fetchPostDetail(postId: number) {
 
     if (result.success) {
       return result.data.post;
+    } else {
+      throw new Error(result.error.message);
+    }
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+export async function fetchPostComments(postId: number) {
+  try {
+    const result = await apiRequest<{
+      postId: number;
+      comments: CommentItem[];
+    }>(`/api/posts/${postId}`);
+
+    if (result.success) {
+      return result.data;
     } else {
       throw new Error(result.error.message);
     }

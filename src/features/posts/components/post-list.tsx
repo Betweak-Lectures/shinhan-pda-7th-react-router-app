@@ -11,7 +11,7 @@ export default function PostList() {
     isError,
     // error,
   } = usePostList({
-    page: 1,
+    page: 6,
     limit: 10,
   });
 

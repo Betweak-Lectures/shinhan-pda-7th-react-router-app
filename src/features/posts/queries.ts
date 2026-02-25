@@ -1,5 +1,5 @@
 // src/features/posts/queries.ts
-import { fetchPostDetail, fetchPostList } from "./apis";
+import { fetchPostComments, fetchPostDetail, fetchPostList } from "./apis";
 
 // Query KEY
 export const POST_LIST_QUERY_KEY = "posts" as const;
@@ -8,6 +8,8 @@ export const POST_LIST_QUERY_KEY = "posts" as const;
 export const postQueryKey = {
   list: (page: number, limit: number) => ["posts", page, limit] as const,
   detail: (postId: number) => ["posts", "details", postId] as const,
+
+  comments: (postId: number) => ["posts", "comments", postId],
 } as const;
 
 // queryOptions
@@ -22,5 +24,12 @@ export function getPostDetailQueryOption(postId: number) {
   return {
     queryKey: postQueryKey.detail(postId),
     queryFn: () => fetchPostDetail(postId),
+  };
+}
+
+export function getPostCommentQueryOption(postId: number) {
+  return {
+    queryKey: postQueryKey.comments(postId),
+    queryFn: () => fetchPostComments(postId),
   };
 }
