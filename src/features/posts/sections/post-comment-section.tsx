@@ -16,8 +16,6 @@ export default function PostCommentSection({
     error,
   } = usePostComments({ postId });
 
-  //   const isMine = user && user.id === post?.authorId;
-
   if (isLoading) {
     return <Spinner className="w-2xl h-2xl" />;
   }
@@ -28,8 +26,6 @@ export default function PostCommentSection({
   if (!commentData) {
     return <div>댓글이 없습니다.</div>;
   }
-
-  console.log(commentData);
 
   return (
     <section className="space-y-6">
